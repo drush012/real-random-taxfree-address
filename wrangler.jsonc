@@ -1,0 +1,8 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "real-random-taxfree-address",
+	"compatibility_date": "2026-10-01",
+	"assets": {
+		"directory": "./public"
+	}
+}

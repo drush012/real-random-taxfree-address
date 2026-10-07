@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAC 地址查询 - 查询 MAC 地址所属厂商</title>
+<meta name="description" content="输入 MAC 地址，查询所属厂商、注册国家和地址类型（单播/组播、全球/本地管理），支持批量查询。">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><path d='M16 6a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.6a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2z' fill='white'/></svg>">
+<link rel="stylesheet" href="/assets/style.css?v=9b56f306">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-copy" viewBox="0 0 24 24"><path fill="currentColor" d="M16 1H6a2 2 0 0 0-2 2v12h2V3h10V1zm3 4H10a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H10V7h9v14z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><path d="M7.5 12.5l3 3 6-6.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path fill="currentColor" d="M17.65 6.35A7.96 7.96 0 0 0 12 4a8 8 0 1 0 7.73 10h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></symbol>
+  <symbol id="i-copyall" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3h-4.18A3 3 0 0 0 12 1a3 3 0 0 0-2.82 2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path fill="currentColor" d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7l-4-4zm-5 16a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm3-10H5V5h10v4z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></symbol>
+  <symbol id="i-bookmark" viewBox="0 0 24 24"><path fill="currentColor" d="M17 3H7a2 2 0 0 0-2 2v16l7-3 7 3V5a2 2 0 0 0-2-2zm0 15-5-2.18L7 18V5h10v13z"/></symbol>
+</svg>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/">
+      <span class="logo"><svg width="18" height="18"><use href="#i-pin"/></svg></span>
+      <span>随机地址</span>
+    </a>
+    <nav class="links" aria-label="主导航">
+      <a href="/us/">美国地址</a>
+      <a href="/">美国免税州地址</a>
+      <a href="/hk/">香港地址</a>
+      <a href="/gb/">英国地址</a>
+      <details class="more active"><summary>更多地址</summary><div class="menu"><a href="/de/">德国地址</a><a href="/sg/">新加坡地址</a><a href="/jp/">日本地址</a><a href="/tw/">台湾地址</a><a href="/mac/">MAC地址生成</a><a class="active" href="/mac-lookup/">MAC地址查询</a><a href="/tr/">土耳其地址</a><a href="/kr/">韩国地址</a><a href="/au/">澳大利亚地址</a></div></details>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card">
+    <div class="hero">
+      <div class="hero-text">
+        <h1><span class="hl">MAC 地址</span>厂商查询</h1>
+        <p class="desc">根据 IEEE 官方 OUI 注册表查询 MAC 地址的生产厂商和注册国家，并判断是单播还是组播、全球唯一还是本地管理（随机）地址。查询完全在浏览器内完成。</p>
+        <ul class="badges"><li><svg width="18" height="18"><use href="#i-check"/></svg>免费可用</li><li><svg width="18" height="18"><use href="#i-check"/></svg>无需注册</li><li><svg width="18" height="18"><use href="#i-check"/></svg>IEEE 官方数据</li></ul>
+        <p class="stats" id="stats" aria-live="polite">加载厂商库…</p>
+      </div>
+      <div class="hero-form">
+        <label class="lbl" for="input">MAC 地址（每行一个，支持任意分隔符）</label>
+        <textarea id="input" class="textarea" rows="6" placeholder="F0:D1:A9:12:34:56&#10;00-1A-2B-3C-4D-5E&#10;001a.2b3c.4d5e"></textarea>
+        <button type="button" class="btn-primary" id="lookup" disabled><svg width="20" height="20"><use href="#i-refresh"/></svg>查询厂商</button>
+      </div>
+    </div>
+    <div class="results">
+      <div class="results-head"><h2>查询结果</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>MAC 地址</th><th>厂商</th><th>国家/地区</th><th>类型</th></tr></thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+        <p class="empty" id="resultEmpty">输入 MAC 地址后点击查询。</p>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <p>厂商数据来自 <a href="https://standards.ieee.org/products-programs/regauth/" target="_blank" rel="noopener">IEEE 注册管理机构</a> 公开的 OUI（MA-L）注册表。仅覆盖 24 位 OUI 前缀；MA-M、MA-S 小块分配会显示为其上级前缀的登记者。</p>
+  </footer>
+</main>
+<div class="toast" id="toast" role="status"></div>
+<script src="/assets/mac.js?v=1ae6c76e"></script>
+</body>
+</html>
