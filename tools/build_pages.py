@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent / "public"
+SITE = "https://haike.eu.cc"  # public domain, used for sitemap.xml
 
 OA = '<a href="https://openaddresses.io" target="_blank" rel="noopener">OpenAddresses</a>'
 GEONAMES = '<a href="https://www.geonames.org" target="_blank" rel="noopener">GeoNames</a>（CC BY 4.0）'
@@ -318,6 +319,13 @@ def main():
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(versioned(tool_html(t)), encoding="utf8")
         print("wrote", out.relative_to(ROOT))
+    paths = [p["path"] for p in PAGES if p["ready"]] + [t["path"] for t in TOOL_PAGES]
+    urls = "".join(f"  <url><loc>{SITE}/{p}</loc></url>\n" for p in paths)
+    (ROOT / "sitemap.xml").write_text(
+        f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n',
+        encoding="utf8")
+    (ROOT / "robots.txt").write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf8")
+    print("wrote sitemap.xml, robots.txt")
 
 
 TEMPLATE = """<!doctype html>
